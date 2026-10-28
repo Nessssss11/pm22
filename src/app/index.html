@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pm22 — Gulp</title>
-    <link rel="stylesheet" href="css/main.min.css">
+    <title>pm22 — Bootstrap + SCSS</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
 </head>
 <body>
 @@include('components/header.html')
 
-<div class="layout">
-    @@include('components/sidebar.html')
-
-    <main class="content">
-        <h2>Лабораторна робота 1</h2>
-        <p>Автоматизація задач фронтенд розробки з використанням Gulp.</p>
-        <img src="imgs/img.png" alt="Фото" width="300">
-    </main>
+<div class="container">
+    <div class="row">
+        @@include('components/sidebar.html')
+        @@include('components/content.html')
+    </div>
 </div>
 
 @@include('components/footer.html')
 
+<script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/main.min.js"></script>
 </body>
 </html>

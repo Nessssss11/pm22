@@ -1,0 +1,21 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.footer {
+  background: $dark;
+  color: #fff;
+  padding: $spacing * 3 0;
+  font-size: $base-font-size * 0.875;
+
+  &__inner {
+    @include flex-center(column);
+  }
+
+  a {
+    color: $primary-light;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}

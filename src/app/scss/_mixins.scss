@@ -1,0 +1,10 @@
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin card-shadow($blur: 8px, $alpha: 0.15) {
+  box-shadow: 0 2px $blur rgba(0, 0, 0, $alpha);
+}

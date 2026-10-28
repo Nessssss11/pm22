@@ -1,0 +1,34 @@
+@use 'sass:math';
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'base';
+
+.hero {
+  padding: $spacing * 4;
+  background: #fff;
+  border-left: 6px solid $primary;
+  border-radius: $radius;
+  @include card-shadow();
+
+  h1 {
+    @extend %section-title;
+    font-size: $base-font-size * 2;
+  }
+
+  .btn {
+    margin-right: $spacing;
+  }
+}
+
+.section-title {
+  @extend %section-title;
+}
+
+.card {
+  @include card-shadow(10px, 0.12);
+
+  &-img-top {
+    height: math.div(400px, 2);
+    object-fit: cover;
+  }
+}

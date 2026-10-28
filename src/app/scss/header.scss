@@ -1,0 +1,23 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.header {
+  background: $primary;
+  @include card-shadow(6px, 0.25);
+
+  .navbar-brand {
+    font-family: $font-heading;
+    font-size: $base-font-size * 1.5;
+    font-weight: bold;
+  }
+
+  .nav-link {
+    padding: $spacing ($spacing * 2);
+    border-radius: $radius;
+    transition: background 0.2s;
+
+    &:hover {
+      background: $primary-dark;
+    }
+  }
+}

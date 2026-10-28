@@ -17,15 +17,17 @@ const paths = {
     scss: { src: 'src/app/scss/main.scss', watch: 'src/app/scss/**/*.scss' },
     js: { src: 'src/app/js/**/*.js' },
     imgs: { src: 'src/app/imgs/**/*.{jpg,jpeg,png,gif,svg,webp}' },
+    bootstrap: {
+        css: 'node_modules/bootstrap/dist/css/bootstrap.min.css',
+        js: 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js',
+    },
     dist: 'dist',
 };
 
-// Очищення dist (папка створюється автоматично при запуску)
 function clean() {
     return del([paths.dist]);
 }
 
-// 1. HTML + file include (header, sidebar, footer ...)
 function html() {
     return src(paths.html.entry)
         .pipe(fileInclude({ prefix: '@@', basepath: '@file' }))
@@ -33,17 +35,16 @@ function html() {
         .pipe(browserSync.stream());
 }
 
-// 2. SCSS -> CSS + мініфікація
+// ЛР3: єдиний мінімізований файл index.min.css
 function styles() {
     return src(paths.scss.src)
         .pipe(sass().on('error', sass.logError))
         .pipe(cssnano())
-        .pipe(rename({ suffix: '.min' }))
+        .pipe(rename({ basename: 'index', suffix: '.min' }))
         .pipe(dest(`${paths.dist}/css`))
         .pipe(browserSync.stream());
 }
 
-// 3. JavaScript: об'єднання + мініфікація
 function scripts() {
     return src(paths.js.src)
         .pipe(concat('main.min.js'))
@@ -52,14 +53,21 @@ function scripts() {
         .pipe(browserSync.stream());
 }
 
-// 4. Оптимізація зображень
 function images() {
     return src(paths.imgs.src)
         .pipe(imagemin())
         .pipe(dest(`${paths.dist}/imgs`));
 }
 
-// 5. BrowserSync
+// ЛР2: копіювання Bootstrap
+function bootstrapCss() {
+    return src(paths.bootstrap.css).pipe(dest(`${paths.dist}/css`));
+}
+
+function bootstrapJs() {
+    return src(paths.bootstrap.js).pipe(dest(`${paths.dist}/js`));
+}
+
 function serve(done) {
     browserSync.init({
         server: { baseDir: paths.dist },
@@ -69,7 +77,6 @@ function serve(done) {
     done();
 }
 
-// 6. Watcher
 function watcher() {
     watch(paths.html.watch, html);
     watch(paths.scss.watch, styles);
@@ -77,13 +84,18 @@ function watcher() {
     watch(paths.imgs.src, images).on('change', browserSync.reload);
 }
 
-const build = series(clean, parallel(html, styles, scripts, images));
+const build = series(
+    clean,
+    parallel(html, styles, scripts, images, bootstrapCss, bootstrapJs)
+);
 
 exports.clean = clean;
 exports.html = html;
 exports.styles = styles;
 exports.scripts = scripts;
 exports.images = images;
-exports.watch = series(build, serve, watcher);
+exports.bootstrapCss = bootstrapCss;
+exports.bootstrapJs = bootstrapJs;
 exports.build = build;
+exports.watch = series(build, serve, watcher);
 exports.default = series(build, serve, watcher);
